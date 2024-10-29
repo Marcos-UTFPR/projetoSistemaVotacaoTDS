@@ -1,5 +1,5 @@
-using Aula03.Models;
-using Aula03.Persistence;
+using Models;
+using Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

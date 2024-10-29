@@ -1,0 +1,61 @@
+﻿@page "/cadastro-votacao"
+@using projetoSistemaVotacao.Model
+@inject HttpClient Http
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center mb-4">Cadastro de Votação</h3>
+
+            @if (!string.IsNullOrEmpty(mensagem))
+            {
+                <div class="alert @(sucesso ? "alert-success" : "alert-danger")" role="alert">
+                    @mensagem
+                </div>
+            }
+
+            <EditForm Model="@votacao" OnValidSubmit="EnviarVotacao">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" />
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">ID:</label>
+                    <InputText id="nome" @bind-Value="votacao.VotacaoID" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Enviar</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private VotacaoModeloModel votacao = new VotacaoModeloModel();
+    private string mensagem = string.Empty;
+    private bool sucesso = true; // controla o estilo da mensagem (sucesso ou erro)
+
+    private async Task EnviarVotacao()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/votacoes", votacao);
+
+            if (response.IsSuccessStatusCode)
+            {
+                mensagem = "Votação cadastrado com sucesso!";
+                sucesso = true; // exibe a mensagem de sucesso
+                votacao = new VotacaoModeloModel(); // limpa o formulário
+            }
+            else
+            {
+                mensagem = "Erro ao cadastrar a votação.";
+                sucesso = false; // exibe a mensagem de erro
+            }
+        }
+        catch (Exception ex)
+        {
+            mensagem = $"Erro na requisição: {ex.Message}";
+            sucesso = false;
+        }
+    }
+}

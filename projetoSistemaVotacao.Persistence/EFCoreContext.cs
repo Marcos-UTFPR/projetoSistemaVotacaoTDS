@@ -1,7 +1,7 @@
 using projetoSistemaVocacao.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aula03.Persistence;
+namespace Persistence;
 
 public class EFCoreContext : DbContext
 {
